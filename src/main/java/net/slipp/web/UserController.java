@@ -41,4 +41,12 @@ public class UserController {
 		model.addAttribute("user", userRepository.findById(id).get());
 		return "/user/updateForm";
 	}
+	
+	@PostMapping("/{id}")
+	public String update(@PathVariable Long id, User newUser) {
+		User user = userRepository.findById(id).get();
+		user.update(newUser);
+		userRepository.save(user);
+		return "redirect:/users";
+	}
 }
