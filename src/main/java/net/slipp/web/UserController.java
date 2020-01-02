@@ -25,6 +25,12 @@ public class UserController {
 		return "/user/login";
 	}
 	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("user");
+		return "redirect:/";
+	}
+	
 	@PostMapping("/login")
 	public String login(String userId, String password, HttpSession session) {
 		User user = userRepository.findByUserId(userId);
