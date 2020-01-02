@@ -11,7 +11,7 @@ public class User {
 	@GeneratedValue
 	private Long id;
 	
-	@Column(nullable=false, length=20) // nullable=false 옵션이 들어가면 null을 넣을 수 없어. 
+	@Column(nullable=false, length=20, unique=true) // nullable=false : null 불가, unique=ture : id 유일) 
 	private String userId;
 	
 	private String password;
@@ -19,6 +19,15 @@ public class User {
 	private String name;
 	
 	private String email;
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getUserId() {
 		return userId;
