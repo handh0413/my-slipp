@@ -13,6 +13,7 @@
 	<artifactId>my-slipp</artifactId>
 	<version>1.0</version>
 	<name>my-slipp</name>
+	<packaging>war</packaging>
 	<description>SLiPP QnA</description>
 
 	<properties>
@@ -32,7 +33,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -76,4 +81,5 @@
 		</plugins>
 	</build>
 
+	
 </project>
