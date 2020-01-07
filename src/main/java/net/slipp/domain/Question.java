@@ -94,4 +94,8 @@ public class Question {
 		this.contents = contents;
 	}
 
+	public boolean isSameWriter(User sessionedUser) {
+		return this.writer.equals(sessionedUser);
+	}
+
 }
