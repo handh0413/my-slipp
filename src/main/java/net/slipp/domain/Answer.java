@@ -2,7 +2,6 @@ package net.slipp.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -11,40 +10,35 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 
 @Entity
-public class Question {
+public class Answer {
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
 	private User writer;
-	
-	@OneToMany(mappedBy = "question")	// Answer 클래스의 question 필드와 mapping 된다.
-	@OrderBy("id ASC")					// Answer 객체의 id 컬럼을 기준으로 정렬한다.
-	private List<Answer> answers;
-	
-	private String title;
+
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+	private Question question;
 	
 	@Lob
 	private String contents;
-	
+
 	private LocalDateTime createDate;
-	
-	public Question(User writer, String title, String contents) {
-		super();
-		this.writer = writer;
-		this.title = title;
-		this.contents = contents;
-		this.createDate = LocalDateTime.now();
+
+	public Answer() {
+
 	}
 	
-	public Question() {
-		super();
+	public Answer(User writer, Question question, String contents) {
+		this.writer = writer;
+		this.question = question;
+		this.contents = contents;
+		this.createDate = LocalDateTime.now();
 	}
 
 	public Long getId() {
@@ -63,14 +57,6 @@ public class Question {
 		this.writer = writer;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getContents() {
 		return contents;
 	}
@@ -87,6 +73,14 @@ public class Question {
 		this.createDate = createDate;
 	}
 	
+	public Question getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+	
 	public String getFormattedCreateDate() {
 		if (this.createDate == null) {
 			return "";
@@ -94,23 +88,35 @@ public class Question {
 		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
 	}
 	
-	public Integer getAnswersCount() {
-		return answers.size();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Answer other = (Answer) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", writer=" + writer + ", title=" + title + ", contents=" + contents
+		return "Answer [id=" + id + ", writer=" + writer + ", question=" + question + ", contents=" + contents
 				+ ", createDate=" + createDate + "]";
 	}
-
-	public void update(String title, String contents) {
-		this.title = title;
-		this.contents = contents;
-	}
-
-	public boolean isSameWriter(User sessionedUser) {
-		return this.writer.equals(sessionedUser);
-	}
-
+	
 }
