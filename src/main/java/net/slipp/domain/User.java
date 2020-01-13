@@ -5,19 +5,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class User {
 	@Id
 	@GeneratedValue
+	@JsonProperty
 	private Long id;
 	
-	@Column(nullable=false, length=20, unique=true) // nullable=false : null 불가, unique=ture : id 유일) 
+	@Column(nullable=false, length=20, unique=true) // nullable=false : null 불가, unique=ture : id 유일)
+	@JsonProperty
 	private String userId;
 	
+	@JsonIgnore
 	private String password;
 	
+	@JsonProperty
 	private String name;
 	
+	@JsonProperty
 	private String email;
 	
 	public boolean matchPassword(String newPassword) {
@@ -76,7 +84,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+		return "User [userId=" + userId + ", name=" + name + ", email=" + email + "]";
 	}
 
 	public void update(User newUser) {
