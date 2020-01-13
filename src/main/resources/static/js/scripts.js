@@ -32,11 +32,39 @@ function onError() {
 }
 
 function onSuccess(data, status) {
-	console.log(data);
 	var answerTemplate = $("#answerTemplate").html();
-	var template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.id, data.id);
+	var template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
 	
 	$(".qna-comment-slipp-articles").append(template);
 	
 	$(".answer-write textarea").val('');
+}
+
+// $("a.link-delete-reply").click(deleteAnswer);
+// 답변 달고 바로 그 답글을 삭제할 때 이벤트가 처리 안되시는 분은 아래와 같은 처리 하시면 됩니다.
+$(document).on('click', 'a.link-delete-reply', deleteAnswer);
+
+function deleteAnswer(e) {
+	e.preventDefault();
+	
+	var deleteBtn = $(this);
+	var url = deleteBtn.attr("href");
+	console.log(url);
+	
+	$.ajax({
+		type: 'delete',
+		url: url,
+		dataType: 'json',
+		error: function(xhr, status) {
+			
+		},
+		success: function(data, status) {
+			console.log(data);
+			if (data.valid) {
+				deleteBtn.closest("article").remove();
+			} else {
+				alert(data.errorMessage);
+			}
+		}
+	});
 }
