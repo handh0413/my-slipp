@@ -1,5 +1,5 @@
-INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL) VALUES ('1', 'donghee.han', '1234', '한동희', 'donghee.han@gmail.com');
-INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL) VALUES ('2', 'bogeom.park', '1234', '박보검', 'bogeom.park@gmail.com');
+INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL, CREATE_DATE) VALUES ('1', 'donghee.han', '1234', '한동희', 'donghee.han@gmail.com', CURRENT_TIMESTAMP);
+INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL, CREATE_DATE) VALUES ('2', 'bogeom.park', '1234', '박보검', 'bogeom.park@gmail.com', CURRENT_TIMESTAMP);
 
 INSERT INTO QUESTION (ID, WRITER_ID, TITLE, CONTENTS, CREATE_DATE, COUNT_OF_ANSWER) VALUES (1, 1, '한동희가 쓴 글', '한동희가 쓴 내용', CURRENT_TIMESTAMP(), 0);
 INSERT INTO QUESTION (ID, WRITER_ID, TITLE, CONTENTS, CREATE_DATE, COUNT_OF_ANSWER) VALUES (2, 2, '박보검이 쓴 글', '박보검이 쓴 내용', CURRENT_TIMESTAMP(), 0);  
