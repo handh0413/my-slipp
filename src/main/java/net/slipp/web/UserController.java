@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.slipp.domain.Result;
 import net.slipp.domain.User;
 import net.slipp.domain.UserRepository;
 
@@ -70,33 +71,40 @@ public class UserController {
 	
 	@GetMapping("{id}/form")
 	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "redirect:/users/loginForm";
-		}
-
-		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-		if (!sessionedUser.matchId(id)) {
-			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+		User user = userRepository.findById(id).get();
+		Result result = userValid(session, user);
+		if (!result.isValid()) {
+			model.addAttribute("errorMessage", result.getErrorMessage());
+			return "/user/login";
 		}
 		
-		model.addAttribute("user", userRepository.findById(id).get());
+		model.addAttribute("user", user);
 		return "/user/updateForm";
 	}
 	
 	@PostMapping("/{id}")
-	public String update(@PathVariable Long id, User newUser, HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "redirect:/users/loginForm";
-		}
-		
-		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-		if (!sessionedUser.matchId(id)) {
-			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
-		}
-		
+	public String update(@PathVariable Long id, User newUser, Model model, HttpSession session) {
 		User user = userRepository.findById(id).get();
+		Result result = userValid(session, user);
+		if (!result.isValid()) {
+			model.addAttribute("errorMessage", result.getErrorMessage());
+			return "/user/login";
+		}
+
 		user.update(newUser);
 		userRepository.save(user);
 		return "redirect:/users";
+	}
+	
+	private Result userValid(HttpSession session, User user) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
+			return Result.fail("로그인이 필요합니다.");
+		}
+		
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		if (!loginUser.equals(user)) {
+			return Result.fail("자신의 정보만 수정할 수 있습니다.");
+		}
+		return Result.ok();
 	}
 }

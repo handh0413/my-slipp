@@ -39,6 +39,9 @@ public class Question {
 	@JsonProperty
 	private String contents;
 	
+	@JsonProperty
+	private int countOfAnswer = 0;
+	
 	private LocalDateTime createDate;
 	
 	public Question(User writer, String title, String contents) {
