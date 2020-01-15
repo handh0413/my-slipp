@@ -122,4 +122,11 @@ public class Question {
 		return this.writer.equals(sessionedUser);
 	}
 
+	public void addAnswer() {
+		this.countOfAnswer += 1;
+	}
+	
+	public void deleteAnswer() {
+		this.countOfAnswer -= 1;
+	}
 }

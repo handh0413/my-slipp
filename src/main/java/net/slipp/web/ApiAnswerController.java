@@ -35,6 +35,8 @@ public class ApiAnswerController {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		Question question = questionRepository.findById(questionId).get();
 		Answer answer = new Answer(loginUser, question, contents);
+		
+		question.addAnswer();
 		return answerRepository.save(answer);
 	}
 	
@@ -49,6 +51,10 @@ public class ApiAnswerController {
 		if (!answer.isSameWriter(loginUser)) {
 			return Result.fail("자신이 쓴 댓글만 수정, 삭제가 가능합니다.");
 		}
+		
+		Question question = questionRepository.findById(questionId).get();
+		question.deleteAnswer();
+		questionRepository.save(question);
 		
 		answerRepository.delete(answer);
 		return Result.ok();
