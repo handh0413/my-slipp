@@ -19,8 +19,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class) 
 public class AbstractEntity {
+	// (strategy = GenerationType.IDENTITY) 옵션을 추가하지 않으면 데이터 추가시 id 컬럼 중복 오류가 발생한다.(import.sql에서 기존에 데이터를 미리 추가한 경우)
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	@JsonProperty
 	private Long id;
 	
